@@ -1,0 +1,60 @@
+# API Keys and Secrets
+.env
+.env.local
+.env.*.local
+*_local.json
+*.key
+*.pem
+
+# Personal configurations (with actual keys)
+.mcp.local.json
+
+# Node modules (if any MCP servers are installed locally)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Skills backup archives (keep source)
+skills/*.zip
+skills/*.tar.gz
+
+# Packaged skills (root level)
+supabase-skill.zip
+
+# Local testing
+test-output/
+.test/
+.claude/
+.osgrep

@@ -1,0 +1,265 @@
+{
+  "mcpServers": {
+    "perplexity": {
+      "description": "Perplexity AI search and chat integration",
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/path/to/perplexity-mcp/build/index.js"
+      ],
+      "env": {
+        "PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Install: Clone https://github.com/your-repo/perplexity-mcp",
+          "Build: npm install && npm run build",
+          "Get API key from: https://www.perplexity.ai/settings/api",
+          "Replace YOUR_PERPLEXITY_API_KEY_HERE with your actual key"
+        ]
+      }
+    },
+    "playwright": {
+      "description": "Browser automation and testing with Playwright",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "setup": {
+        "instructions": [
+          "No installation needed - uses npx to run latest version",
+          "First run may take a moment to download package"
+        ]
+      }
+    },
+    "codex": {
+      "description": "Codex MCP server for enhanced code operations",
+      "type": "stdio",
+      "command": "codex",
+      "args": [
+        "mcp"
+      ],
+      "setup": {
+        "instructions": [
+          "Install codex CLI tool first",
+          "Follow installation instructions at codex documentation"
+        ]
+      }
+    },
+    "shadcn": {
+      "description": "shadcn/ui component library integration",
+      "type": "http",
+      "url": "https://www.shadcn.io/api/mcp",
+      "setup": {
+        "instructions": [
+          "No installation needed - HTTP endpoint",
+          "Public API, no authentication required"
+        ]
+      }
+    },
+    "chrome-devtools": {
+      "description": "Chrome DevTools integration for browser debugging",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp"
+      ],
+      "setup": {
+        "instructions": [
+          "No installation needed - uses npx to run latest version",
+          "Chrome browser should be installed on the system"
+        ]
+      }
+    },
+    "figma": {
+      "description": "Figma design file integration and conversion",
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "setup": {
+        "instructions": [
+          "No installation needed - HTTP endpoint",
+          "May require Figma authentication for private files"
+        ]
+      }
+    },
+    "supabase": {
+      "description": "Supabase database integration for PostgreSQL operations",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--project-ref=YOUR_PROJECT_REF_HERE"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Get your project ref from Supabase dashboard (Settings > General)",
+          "Generate access token from: https://supabase.com/dashboard/account/tokens",
+          "Replace YOUR_PROJECT_REF_HERE with your project reference",
+          "Replace YOUR_SUPABASE_ACCESS_TOKEN_HERE with your token"
+        ]
+      }
+    },
+    "netlify": {
+      "description": "Netlify deployment and site management",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@netlify/mcp"
+      ],
+      "env": {
+        "NETLIFY_AUTH_TOKEN": "YOUR_NETLIFY_AUTH_TOKEN_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Generate personal access token from: https://app.netlify.com/user/applications",
+          "Replace YOUR_NETLIFY_AUTH_TOKEN_HERE with your token"
+        ]
+      }
+    },
+    "telnyx": {
+      "description": "Telnyx telephony, messaging, and AI assistant APIs",
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/team-telnyx/telnyx-mcp-server.git",
+        "telnyx-mcp-server"
+      ],
+      "env": {
+        "TELNYX_API_KEY": "YOUR_TELNYX_API_KEY_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Install uv/uvx first: curl -LsSf https://astral.sh/uv/install.sh | sh",
+          "Or via Homebrew: brew install uv",
+          "Get API key from: https://portal.telnyx.com/#/app/api-keys",
+          "Replace YOUR_TELNYX_API_KEY_HERE with your actual key",
+          "Provides: phone number management, SMS/MMS, voice calls, AI assistants"
+        ]
+      }
+    },
+    "twilio": {
+      "description": "Twilio SMS and Voice API integration - send messages, manage conversations, validate phone numbers",
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "/path/to/twilio-mcp-server/dist/index.js"
+      ],
+      "env": {
+        "TWILIO_ACCOUNT_SID": "YOUR_TWILIO_ACCOUNT_SID_HERE",
+        "TWILIO_AUTH_TOKEN": "YOUR_TWILIO_AUTH_TOKEN_HERE",
+        "TWILIO_PHONE_NUMBER": "YOUR_TWILIO_PHONE_NUMBER_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Clone: git clone https://github.com/your-org/twilio-mcp-server",
+          "Install: cd twilio-mcp-server && npm install && npm run build",
+          "Update args path to your local twilio-mcp-server location",
+          "Get credentials from: https://console.twilio.com/",
+          "Account SID and Auth Token: Console Dashboard > Account Info",
+          "Phone Number: Phone Numbers > Manage > Active numbers",
+          "Replace YOUR_TWILIO_* placeholders with actual values"
+        ]
+      }
+    },
+    "filesystem": {
+      "description": "Enhanced filesystem access for specific directories",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/your/allowed/directory1",
+        "/path/to/your/allowed/directory2"
+      ],
+      "setup": {
+        "instructions": [
+          "Replace paths with directories you want to grant access to",
+          "Example: '/Users/yourname/Desktop/Projects'",
+          "Multiple directories can be specified as separate arguments",
+          "Provides enhanced file operations beyond default Claude Code tools"
+        ]
+      }
+    },
+    "context7": {
+      "description": "Context7 library documentation - up-to-date docs and code examples for any library",
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "setup": {
+        "instructions": [
+          "No installation needed - HTTP endpoint",
+          "Public API, no authentication required",
+          "Provides: resolve-library-id, get-library-docs",
+          "Use resolve-library-id first to get Context7-compatible library ID",
+          "Then use get-library-docs with that ID to fetch documentation"
+        ]
+      }
+    },
+    "mcp-google-sheets": {
+      "description": "Google Sheets integration for reading, writing, and managing spreadsheets",
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-google-sheets@latest"
+      ],
+      "env": {
+        "SERVICE_ACCOUNT_PATH": "/path/to/your/google-sheets-service-account.json",
+        "DRIVE_FOLDER_ID": "YOUR_DRIVE_FOLDER_ID_HERE"
+      },
+      "setup": {
+        "instructions": [
+          "Create Google Cloud project: https://console.cloud.google.com/",
+          "Enable Google Sheets API: APIs & Services > Library > Google Sheets API",
+          "Enable Google Drive API: APIs & Services > Library > Google Drive API",
+          "Create service account: IAM & Admin > Service Accounts > Create",
+          "Download JSON key file and save as ~/.claude/google-sheets-service-account.json",
+          "Set SERVICE_ACCOUNT_PATH to the JSON file location",
+          "Get DRIVE_FOLDER_ID from Google Drive folder URL (the ID after /folders/)",
+          "Share Drive folder with service account email for access",
+          "Provides: get_sheet_data, update_cells, batch_update, list_sheets, create_spreadsheet, share_spreadsheet"
+        ]
+      }
+    },
+    "arxiv": {
+      "description": "ArXiv academic paper search, download, and analysis (2k+ GitHub stars)",
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "tool",
+        "run",
+        "arxiv-mcp-server",
+        "--storage-path",
+        "~/.arxiv-papers"
+      ],
+      "setup": {
+        "instructions": [
+          "Install uv first: curl -LsSf https://astral.sh/uv/install.sh | sh",
+          "Or via Homebrew: brew install uv",
+          "Install server: uv tool install arxiv-mcp-server",
+          "Papers stored locally at ~/.arxiv-papers for faster access",
+          "Provides: search_papers, download_paper, list_papers, read_paper",
+          "Includes deep-paper-analysis prompt for comprehensive paper review",
+          "GitHub: https://github.com/blazickjp/arxiv-mcp-server (2k+ stars)"
+        ]
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Minoan Claude Code shared MCP server configuration",
+    "lastUpdated": "2026-01-02",
+    "notes": [
+      "Curated MCP servers for Claude Code development",
+      "Replace placeholder API keys with your actual keys",
+      "Some servers run locally (stdio), others are HTTP endpoints",
+      "Use 'claude mcp add' to add these to your configuration"
+    ]
+  }
+}

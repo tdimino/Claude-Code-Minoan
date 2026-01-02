@@ -1,0 +1,169 @@
+# Netlify Configuration Template
+# Copy this file to your repository root as "netlify.toml"
+
+[build]
+  # Build command
+  command = "npm run build"
+
+  # Directory to publish (output directory)
+  publish = ".next"
+
+  # Serverless functions directory
+  functions = ".netlify/functions"
+
+  # Base directory (if project is in subdirectory)
+  # base = "apps/web"
+
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "18"
+
+  # Disable Next.js telemetry
+  NEXT_TELEMETRY_DISABLED = "1"
+
+  # NPM flags (if needed)
+  # NPM_FLAGS = "--legacy-peer-deps"
+
+[functions]
+  # Functions directory
+  directory = ".netlify/functions"
+
+  # Node bundler (esbuild is recommended)
+  node_bundler = "esbuild"
+
+  # Files to include in function deployment
+  included_files = [
+    ".netlify/functions/**",
+    "src/lib/**"
+  ]
+
+  # Default timeout in seconds (max 10 for free, 26 for Pro)
+  timeout = 10
+
+# ==========================================
+# Function-Specific Configuration
+# ==========================================
+
+# Example: Webhook function with extended timeout
+[[functions."webhook"]]
+  timeout = 26
+
+# Example: SMS webhook function
+[[functions."sms-webhook"]]
+  timeout = 26
+
+# ==========================================
+# Redirects and Rewrites
+# ==========================================
+
+# Rewrite API routes to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+# Example: SPA fallback for client-side routing
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Example: Redirect old URLs
+# [[redirects]]
+#   from = "/old-path"
+#   to = "/new-path"
+#   status = 301
+
+# ==========================================
+# Headers Configuration
+# ==========================================
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    # Content-Security-Policy = "default-src 'self'"
+
+# CORS headers for API endpoints
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+# Cache control for static assets
+# [[headers]]
+#   for = "/static/*"
+#   [headers.values]
+#     Cache-Control = "public, max-age=31536000, immutable"
+
+# ==========================================
+# Context-Specific Configuration
+# ==========================================
+
+# Production environment
+[context.production]
+  [context.production.environment]
+    NODE_ENV = "production"
+    # Add production-specific env vars here
+
+# Deploy preview environment
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NODE_ENV = "staging"
+    # Add staging-specific env vars here
+
+# Branch deploy environment
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"
+    # Add development-specific env vars here
+
+# Branch-specific configuration (example: develop branch)
+# [context.develop]
+#   command = "npm run build:dev"
+#   [context.develop.environment]
+#     DEBUG = "true"
+
+# ==========================================
+# Local Development (Netlify Dev)
+# ==========================================
+
+[dev]
+  # Command to start local dev server
+  command = "npm run dev"
+
+  # Port for local dev server
+  port = 3000
+
+  # Port for functions
+  functions = 9999
+
+  # Auto-open browser
+  autoLaunch = false
+
+  # Framework detection override
+  # framework = "#custom"
+
+# ==========================================
+# Plugins
+# ==========================================
+
+# Next.js plugin
+# [[plugins]]
+#   package = "@netlify/plugin-nextjs"
+
+# ==========================================
+# Edge Functions (Beta)
+# ==========================================
+
+# [[edge_functions]]
+#   path = "/api/edge/*"
+#   function = "edge-handler"

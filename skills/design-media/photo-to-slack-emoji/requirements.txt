@@ -1,0 +1,14 @@
+# Photo to Slack Emoji - Python Dependencies
+
+# Image processing
+Pillow>=10.0.0
+
+# Google Gemini API
+google-genai>=0.2.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Optional: For advanced image operations
+# imageio>=2.31.0
+# numpy>=1.24.0

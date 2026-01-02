@@ -1,0 +1,81 @@
+# Netlify Configuration for Next.js + Serverless Functions
+# Place this file in your project root
+
+[build]
+  # Build command for Next.js
+  command = "npm run build"
+
+  # Publish directory (Next.js output)
+  publish = ".next"
+
+[build.environment]
+  # Node version (18 or higher recommended)
+  NODE_VERSION = "18"
+
+  # Optional: Flags for npm install
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Next.js Plugin (REQUIRED for Next.js on Netlify)
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Netlify Functions Configuration
+[functions]
+  # Directory containing your serverless functions
+  directory = "netlify/functions"
+
+  # Node bundler (esbuild recommended for speed)
+  node_bundler = "esbuild"
+
+  # Include non-JavaScript files in function deployment
+  # Example: AI model configs, markdown files, JSON data
+  included_files = [
+    "src/lib/**/*.md",
+    "src/lib/**/*.json",
+    "config/**/*"
+  ]
+
+# Redirects and Rewrites
+# Redirect /api/* to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+# Example: Redirect old URL to new URL
+[[redirects]]
+  from = "/old-path"
+  to = "/new-path"
+  status = 301
+
+# Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Context-Specific Configuration
+# Production environment
+[context.production]
+  [context.production.environment]
+    NODE_ENV = "production"
+
+# Deploy preview environment
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    NODE_ENV = "staging"
+
+# Branch deploy environment
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"
+
+# Example: Function-Specific Timeout
+# Note: Timeouts are fixed at 10s (regular) or 15min (background)
+# Background functions are detected by filename: *-background.ts
+# No explicit timeout configuration needed

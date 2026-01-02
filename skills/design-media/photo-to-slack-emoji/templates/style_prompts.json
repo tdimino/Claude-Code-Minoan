@@ -1,0 +1,81 @@
+{
+  "classic_emoji": {
+    "name": "Classic Emoji",
+    "description": "Round, expressive emoji style like Apple/Unicode emojis",
+    "prompt": "Transform this photo into a classic emoji style: round shape, simplified features, bold outlines, expressive and friendly, vibrant yellow/warm tones, minimal shading, white or transparent background. Focus on the subject's main expression and make it instantly recognizable at small sizes. Think Apple/Unicode emoji aesthetic.",
+    "best_for": ["faces", "animals", "expressions"],
+    "file_size": "medium"
+  },
+
+  "flat_icon": {
+    "name": "Flat Icon",
+    "description": "Minimalist flat design icon",
+    "prompt": "Transform this photo into a flat, minimalist icon: simple geometric shapes, solid colors, no gradients, bold clean outlines, modern flat design aesthetic, white background. Capture the essence of the subject with minimal detail. Think Material Design or iOS icon style.",
+    "best_for": ["objects", "logos", "symbols"],
+    "file_size": "small"
+  },
+
+  "kawaii_sticker": {
+    "name": "Kawaii Sticker",
+    "description": "Cute Japanese kawaii aesthetic",
+    "prompt": "Transform this photo into a kawaii-style sticker: cute and playful, rounded features, large expressive eyes, simple cel-shading, vibrant color palette, bold clean outlines, white background. Make it adorable and friendly with that Japanese cute aesthetic.",
+    "best_for": ["animals", "characters", "food"],
+    "file_size": "medium"
+  },
+
+  "pixel_art": {
+    "name": "Pixel Art",
+    "description": "Retro 8-bit/16-bit pixel art",
+    "prompt": "Transform this photo into pixel art: 32x32 pixel style, retro 8-bit aesthetic, limited color palette (8-16 colors), chunky pixels, clear subject outline, simple shading, transparent or solid background. Think classic Nintendo/Sega era.",
+    "best_for": ["characters", "objects", "icons"],
+    "file_size": "very_small"
+  },
+
+  "chibi": {
+    "name": "Chibi Anime",
+    "description": "Super-deformed anime style with oversized head",
+    "prompt": "Transform this photo into chibi anime style: super-deformed proportions with oversized head (head is 1/3 of total height), small body, large expressive eyes, simplified features, bold outlines, cute and cartoonish, vibrant anime colors, white background. Maintain the subject's key characteristics but make it adorable.",
+    "best_for": ["people", "characters", "animals"],
+    "file_size": "medium"
+  },
+
+  "cartoon": {
+    "name": "Cartoon",
+    "description": "Exaggerated cartoon style",
+    "prompt": "Transform this photo into a cartoon style: exaggerated features, bold black outlines, cel-shaded coloring, expressive and dynamic, vibrant colors, simplified details, white background. Think modern animated series aesthetic.",
+    "best_for": ["people", "animals", "characters"],
+    "file_size": "medium"
+  },
+
+  "line_art": {
+    "name": "Line Art",
+    "description": "Simple black and white line drawing",
+    "prompt": "Transform this photo into clean line art: simple black lines on white background, minimal detail, essential features only, clean smooth strokes, no shading or color, iconic and recognizable outline. Like a coloring book page.",
+    "best_for": ["objects", "logos", "simple subjects"],
+    "file_size": "very_small"
+  },
+
+  "sticker_pack": {
+    "name": "Sticker Pack Style",
+    "description": "Colorful messaging app sticker",
+    "prompt": "Transform this photo into a messaging app sticker: bold outlines, vibrant colors, slight drop shadow for depth, expressive and fun, simplified features, white or transparent background with subtle border. Like LINE or Telegram stickers.",
+    "best_for": ["animals", "characters", "expressive subjects"],
+    "file_size": "medium"
+  },
+
+  "memoji": {
+    "name": "Memoji Style",
+    "description": "Apple Memoji-inspired 3D cartoon",
+    "prompt": "Transform this photo into a Memoji-style avatar: 3D-rendered appearance with soft shading, simplified geometric features, large expressive eyes, smooth rounded forms, friendly and approachable, vibrant but natural colors, white background. Similar to Apple's Memoji aesthetic.",
+    "best_for": ["faces", "portraits"],
+    "file_size": "large"
+  },
+
+  "retro_emoji": {
+    "name": "Retro Emoji",
+    "description": "Vintage yellow smiley style",
+    "prompt": "Transform this photo into a retro emoji: bright yellow circle, simple black outlines, minimal features, high contrast, vintage 1970s smiley aesthetic, solid colors, no gradients, clean and iconic. Classic acid smiley vibe.",
+    "best_for": ["faces", "expressions"],
+    "file_size": "small"
+  }
+}
