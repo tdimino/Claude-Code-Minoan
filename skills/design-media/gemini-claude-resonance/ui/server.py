@@ -2014,8 +2014,26 @@ HTML_TEMPLATE = """
             div.className = 'message daimon';
             const icon = daimonIcons[daimon] || 'iconoir-sparks';
 
-            // Use first line of AI text as title (or daimon name)
-            const title = text ? text.split('\\n')[0].substring(0, 80) : `Vision by ${daimon}`;
+            // Format filename for lightbox title: "[image name] by [daimon]"
+            function formatFilenameTitle(path, daimonName) {
+                if (!path) return `Vision by ${daimonName}`;
+                // Extract filename from path
+                const filename = path.split('/').pop().replace(/\\.jpg$/i, '');
+                // Remove timestamp (YYYYMMDD_HHMMSS at end)
+                const withoutTimestamp = filename.replace(/_\\d{8}_\\d{6}$/, '');
+                // Remove daimon prefix (e.g., "minoan_" or "dreamer_")
+                const withoutDaimon = withoutTimestamp.replace(new RegExp('^' + daimonName + '_', 'i'), '');
+                // Replace underscores with spaces and title case
+                const imageName = withoutDaimon
+                    .split('_')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                // Format daimon name (capitalize first letter)
+                const formattedDaimon = daimonName.charAt(0).toUpperCase() + daimonName.slice(1);
+                return `"${imageName}" by ${formattedDaimon}`;
+            }
+
+            const title = savedPath ? formatFilenameTitle(savedPath, daimon) : (text ? text.split('\\n')[0].substring(0, 80) : `Vision by ${daimon}`);
             const escapedTitle = escapeHtml(title);
             const escapedPath = savedPath ? escapeHtml(savedPath) : '';
 
@@ -2441,16 +2459,20 @@ SESSION: resonance-field-{session.session_id[:8] if session.session_id else 'liv
                 # Single card reading
                 print(f"[Minoan] Single card reading", flush=True)
                 card_prompt = f"""Draw a single tarot card for: "{message}"
-Generate ONE tarot card image that answers this question."""
+Generate ONE tarot card image. Reply with ONLY the card name."""
 
                 card_result = await query_gemini(daimon, card_prompt, gemini_key, True, minoan_context)
+                # Extract card name from response text
+                card_name = card_result.get("text", "").strip()
+                if not card_name or len(card_name) > 50:
+                    card_name = "single_card"
                 result = {
                     "text": "",
                     "image": card_result.get("image"),
                     "verb": daimon.get("verb", "divined")
                 }
                 if result.get("image"):
-                    saved_path = save_image(result["image"], daimon_name, message[:30])
+                    saved_path = save_image(result["image"], daimon_name, card_name)
                     result["saved_path"] = str(saved_path)
                     print(f"[Minoan] Card saved: {saved_path}", flush=True)
 
@@ -2482,14 +2504,18 @@ Generate ONE tarot card image that answers this question."""
 
 This is card {numeral} ({meaning}).
 {"The previous cards in this spread are shown above - maintain visual coherence." if generated_card_paths else ""}
-Generate ONE tarot card image only."""
+Generate ONE tarot card image. Reply with ONLY the card name."""
 
                 print(f"[Minoan] Generating card {numeral} (context: {len(current_context)} images)...", flush=True)
                 card_result = await query_gemini(daimon, card_prompt, gemini_key, True, current_context)
 
                 if card_result.get("image"):
-                    # Save image
-                    saved_path = save_image(card_result["image"], daimon_name, f"card_{numeral}_{message[:30]}")
+                    # Extract card name from response text, fallback to numeral
+                    card_name = card_result.get("text", "").strip()
+                    if not card_name or len(card_name) > 50:
+                        card_name = f"card_{numeral}"
+                    # Save image with oracle-chosen name
+                    saved_path = save_image(card_result["image"], daimon_name, card_name)
                     print(f"[Minoan] Card {numeral} saved: {saved_path}", flush=True)
                     all_images.append(card_result["image"])
 
