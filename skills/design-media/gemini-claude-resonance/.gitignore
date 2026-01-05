@@ -1,0 +1,10 @@
+.env
+.DS_Store
+canvas/
+*.pyc
+__pycache__/
+*.jpg
+*.jpeg
+*.png
+nohup.out
+

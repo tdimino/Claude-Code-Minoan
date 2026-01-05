@@ -4,13 +4,19 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version"></a>
-  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-20-green.svg" alt="Skills"></a>
+  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-21-green.svg" alt="Skills"></a>
   <a href="#all-slash-commands"><img src="https://img.shields.io/badge/Commands-30+-purple.svg" alt="Commands"></a>
 </p>
 
 # Minoan Claude Code Configuration
 
 Curated Claude Code configuration including skills, MCP servers, and slash commands for professional development workflows.
+
+<p align="center">
+  <img src="public/images/daimon-chamber.png" alt="Daimon Chamber - Cross-model resonance UI" width="700"/>
+  <br/>
+  <em>Daimon Chamber: Cross-model dialogue between Claude and Gemini with shared visual memory</em>
+</p>
 
 ## Repository Contents
 
@@ -34,6 +40,7 @@ claude-code-minoan/
 │   │   └── twilio-api/              # Twilio SMS/Voice integration
 │   ├── design-media/            # Design & media tools
 │   │   ├── frontend-design/         # Distinctive UI creation
+│   │   ├── gemini-claude-resonance/ # Cross-model AI dialogue with visual memory
 │   │   ├── nano-banana-pro/         # Gemini 3 Pro AI image generation
 │   │   └── photo-to-slack-emoji/    # Photo to Slack emoji converter
 │   ├── research/                # Research tools
@@ -229,6 +236,7 @@ Systematically audits implementation plans:
 ### Design & Media (`skills/design-media/`)
 
 - **frontend-design** - Create distinctive, production-grade frontend interfaces with high design quality. Generates creative, polished code that avoids generic AI aesthetics. Bold typography, unexpected layouts, atmospheric backgrounds
+- **gemini-claude-resonance** - Cross-model dialogue between Claude and Gemini with shared visual memory. Multiple daimones (Flash, Pro, Dreamer, Director, Opus, Resonator) with dynamic verb selection and WorkingMemory-style transcripts. Includes Daimon Chamber UI and Resonance Field protocol for persistent visual narratives
 - **nano-banana-pro** - Generate and edit high-quality images using Google's Nano Banana Pro (Gemini 3 Pro Image) AI model. Supports up to 4K resolution, multiple aspect ratios, and advanced prompting
 - **photo-to-slack-emoji** - Transform photos into Slack-optimized emojis using Nano Banana Pro AI (10 styles, auto-optimization for 64KB limit)
 
@@ -450,9 +458,9 @@ cat ~/.claude/commands/command-name.md
 
 ---
 
-**Last Updated**: 2026-01-02
+**Last Updated**: 2026-01-04
 
-**Skills**: 20 skills across 5 categories
+**Skills**: 21 skills across 5 categories
 **Commands**: 30+ slash commands
 **MCP Servers**: 14 configured servers
 
