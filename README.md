@@ -67,7 +67,7 @@ claude-code-minoan/
 
 ## Quick Start
 
-> **New here?** Jump to [Recommended Workflow Commands](#recommended-workflow-commands) to see the most powerful commands: `/requirements-start`, `/workflows:review`, `/session-start`, `/workflows:plan`, and `/code-review`.
+> **New here?** Jump to [Recommended Workflow Commands](#recommended-workflow-commands) to see the most powerful commands: `/requirements-start`, `/workflows:review`, `feature-dev` plugin, `/workflows:plan`, and `/code-review`.
 
 ### 1. Clone the Repository
 
@@ -175,30 +175,45 @@ Creates prioritized issues with:
 - Provides actionable feedback, not just complaints
 - Creates GitHub issues automatically if requested
 
-### `/session-start` - Structured Session Management
+### `feature-dev` Plugin - Claude Code Team's Arsenal
 
-**Use when**: Starting any coding session (daily development, bug fixes, feature work)
+**Use when**: Building features, exploring codebases, or reviewing code with specialized agents
 
-Initializes session with:
-- Current git state and branch context
-- Session goals and objectives
-- Progress tracking throughout work
-- Integration with Claude Code's native memory system
+The `feature-dev` plugin is the **official Claude Code team's toolkit** - the same agents they use internally. Install it with:
+
+```bash
+/plugin marketplace add anthropics/claude-code
+/plugin install feature-dev
+```
+
+**Available agents** (invoke via Task tool with `subagent_type`):
+
+| Agent | Purpose |
+|-------|---------|
+| `feature-dev:code-architect` | Designs feature architectures by analyzing existing patterns, providing implementation blueprints with specific files, component designs, data flows, and build sequences |
+| `feature-dev:code-explorer` | Deeply analyzes codebase features by tracing execution paths, mapping architecture layers, understanding patterns/abstractions, and documenting dependencies |
+| `feature-dev:code-reviewer` | Reviews code for bugs, logic errors, security vulnerabilities, and quality issues using confidence-based filtering to surface only high-priority findings |
 
 **Why it's powerful**:
-- Ensures context is preserved across sessions
-- Creates clear audit trail of work
-- Helps pick up where you left off
-- Integrates with native memory management
+- Built by the Claude Code team for their own workflows
+- Specialized agents outperform general-purpose prompts
+- `code-architect` creates comprehensive blueprints before you write code
+- `code-explorer` maps unfamiliar codebases quickly
+- `code-reviewer` catches issues with confidence-based prioritization
 
-**Example daily workflow**:
+**Example workflow**:
 ```bash
-/session-start Fix token counting bug in memory module
-# Work on implementation
-/code-review  # Quick review, or use /workflows:review for thorough analysis
-# Address review findings
-/commit
-/session-end
+# Explore an unfamiliar codebase
+# (Claude uses feature-dev:code-explorer agent)
+"How does the authentication system work in this codebase?"
+
+# Design a new feature
+# (Claude uses feature-dev:code-architect agent)
+"Design the architecture for adding OAuth support"
+
+# Review your changes
+# (Claude uses feature-dev:code-reviewer agent)
+"Review my recent changes for any issues"
 ```
 
 ### `/audit-plans` - Plan Completeness Auditing
@@ -316,9 +331,8 @@ Systematically audits implementation plans:
 - `/workflows:plan` - Transform descriptions into project plans
 - `/workflows:plan_review` - Parallel plan review by multiple agents
 
-### Session Management
-- `/session-start` - Initialize coding session with context
-- `/session-end` - Wrap up and document session
+### Official Plugins
+- **`feature-dev`** - Claude Code team's arsenal: `code-architect`, `code-explorer`, `code-reviewer` agents
 
 ## Hooks
 
@@ -361,7 +375,22 @@ Hooks are scripts that run in response to Claude Code events. Copy to `~/.claude
    How should I structure this component? /5x
    ```
 
-## Recommended Plugin: claude-mem
+## Recommended Plugins
+
+### `feature-dev` - Claude Code Team's Arsenal
+
+The official plugin from the Claude Code team. Provides specialized agents for feature development:
+
+```bash
+/plugin marketplace add anthropics/claude-code
+/plugin install feature-dev
+```
+
+- **`code-architect`** - Design feature architectures with implementation blueprints
+- **`code-explorer`** - Trace execution paths and map codebase structure
+- **`code-reviewer`** - Confidence-based code review for high-priority issues
+
+### `claude-mem` - Persistent Memory
 
 Persistent memory across sessions with semantic search. Essential for long-running projects.
 
@@ -419,6 +448,7 @@ claude plugin install claude-mem@thedotmack
 - [ ] Clone repository
 - [ ] Copy skills to `~/.claude/skills/`
 - [ ] Copy commands to `~/.claude/commands/`
+- [ ] Install `feature-dev` plugin (`/plugin marketplace add anthropics/claude-code` then `/plugin install feature-dev`)
 - [ ] Set up essential MCP servers (supabase, arxiv, perplexity, context7)
 - [ ] Configure API keys for perplexity, supabase, netlify
 - [ ] Test a slash command (`/docs`)
@@ -429,6 +459,7 @@ claude plugin install claude-mem@thedotmack
 ## Troubleshooting
 
 ### Skills Not Loading
+
 ```bash
 ls ~/.claude/skills/
 ls ~/.claude/skills/skill-name/
@@ -436,6 +467,7 @@ ls ~/.claude/skills/skill-name/
 ```
 
 ### MCP Server Connection Failed
+
 ```bash
 claude mcp list
 claude mcp get server-name
@@ -444,6 +476,7 @@ claude mcp add server-name ...
 ```
 
 ### Slash Command Not Found
+
 ```bash
 ls ~/.claude/commands/command-name.md
 cat ~/.claude/commands/command-name.md
