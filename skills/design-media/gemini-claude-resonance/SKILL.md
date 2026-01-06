@@ -168,6 +168,8 @@ python scripts/minoan_tarot.py back
 python scripts/minoan_tarot.py list
 ```
 
+*"Sekhinat Daborat" — Ba'alat Tinit*
+
 ---
 
 ## Workflow F: Interactive Chat (Daimon Chamber)
