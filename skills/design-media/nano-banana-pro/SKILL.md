@@ -9,13 +9,13 @@ Generate and edit professional-quality images using Google's state-of-the-art Ge
 
 ## API Configuration
 
-**API Key**: `AIzaSyDup_wH4wwBDAB6pMJv4T3bHtSJ_3y6c20`
-
-Set as environment variable for all commands:
+Set your Gemini API key as an environment variable:
 
 ```bash
-export GEMINI_API_KEY="AIzaSyDup_wH4wwBDAB6pMJv4T3bHtSJ_3y6c20"
+export GEMINI_API_KEY="your-api-key-here"
 ```
+
+Get your API key at: https://aistudio.google.com/apikey
 
 ## Quick Start
 
