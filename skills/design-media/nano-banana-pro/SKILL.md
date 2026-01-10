@@ -9,10 +9,12 @@ Generate and edit professional-quality images using Google's state-of-the-art Ge
 
 ## API Configuration
 
+**API Key**: `AIzaSyDup_wH4wwBDAB6pMJv4T3bHtSJ_3y6c20`
+
 Set as environment variable for all commands:
 
 ```bash
-export GEMINI_API_KEY="your-api-key-here"
+export GEMINI_API_KEY="AIzaSyDup_wH4wwBDAB6pMJv4T3bHtSJ_3y6c20"
 ```
 
 ## Quick Start
@@ -325,6 +327,43 @@ python scripts/test_connection.py --api-key YOUR_KEY
 # Automated testing
 python scripts/test_connection.py --json | jq '.success'
 ```
+
+### generate_with_references.py
+
+Generate images using style reference images (up to 14).
+
+**Parameters**:
+- `prompt` (required): Text description of image to generate
+- `references` (required): One or more reference image paths (up to 14)
+- `--api-key`: API key (or use `GEMINI_API_KEY` env var)
+- `--aspect-ratio`: 1:1 | 2:3 | 3:2 | 3:4 | 4:3 | 4:5 | 5:4 | 9:16 | 16:9 | 21:9 (default: 1:1)
+- `--resolution`: 1K | 2K | 4K (default: 2K)
+- `--output`: Output directory (default: ./output)
+- `--filename`: Base filename (default: generated)
+- `--verbose`: Show detailed output
+
+**Usage**:
+```bash
+# Generate avatar matching reference style
+python scripts/generate_with_references.py \
+  "Portrait of elderly craftsman in same artistic style as references" \
+  ref1.png ref2.jpg ref3.png \
+  --output ./output \
+  --filename craftsman
+
+# Character consistency across images
+python scripts/generate_with_references.py \
+  "Same character in a coffee shop scene" \
+  character_ref1.png character_ref2.png \
+  --aspect-ratio 16:9 \
+  --resolution 2K
+```
+
+**Best practices**:
+- Include style description in prompt ("same artistic style", "match the lighting")
+- Use consistent reference images (same art style, lighting, color palette)
+- Reference images can include characters, objects, or style examples
+- Up to 14 images: 6 for objects, 5 for character consistency
 
 ## Advanced Techniques
 
