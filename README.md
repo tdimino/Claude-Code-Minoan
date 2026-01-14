@@ -21,6 +21,8 @@ Curated Claude Code configuration including skills, MCP servers, and slash comma
 ```
 claude-code-minoan/
 ├── .mcp.json                    # MCP server configurations
+├── extensions/                  # VS Code extensions
+│   └── claude-session-tracker/  # Track & resume Claude sessions across windows
 ├── skills/                      # Custom Claude Code skills
 │   ├── core-development/        # Core development tools
 │   │   ├── architecture-md-builder/ # ARCHITECTURE.md codebase documentation
@@ -270,6 +272,36 @@ Systematically audits implementation plans:
 
 - **crypt-librarian** - Film curator persona for sourcing pre-2016 cinema with literary/gothic sensibility, occult atmosphere, sensual mysticism, and historical grandeur. Uses Perplexity for film discourse, Exa for web searches
 - **travel-requirements-expert** - Systematically gather comprehensive travel itinerary requirements through structured discovery questions, MCP-powered research, and expert detail gathering
+
+## VS Code Extension
+
+### Claude Session Tracker
+
+Track and resume Claude Code sessions across crashes, restarts, and multiple VS Code windows.
+
+**Features:**
+- **Cross-Window Tracking**: See total Claude sessions across ALL VS Code windows (e.g., "Claude Active (7)")
+- **Quick Resume**: `Cmd+Shift+C` to instantly resume your last session
+- **Global Session Browser**: Browse sessions across ALL projects
+- **Crash Recovery**: Resume work after VS Code crashes
+
+**Installation:**
+```bash
+cd extensions/claude-session-tracker
+npm install
+npm run compile
+npx @vscode/vsce package --no-dependencies
+code --install-extension claude-session-tracker-0.1.0.vsix
+```
+
+**Commands:**
+| Command | Keybinding | Description |
+|---------|------------|-------------|
+| Resume Last Claude Session | `Cmd+Shift+C` | Resume most recent session |
+| Pick Claude Session | — | Browse and select from recent sessions |
+| Browse All Claude Sessions | — | Browse sessions across ALL projects |
+
+See [`extensions/claude-session-tracker/readme.md`](extensions/claude-session-tracker/readme.md) for full documentation.
 
 ## Available MCP Servers
 
@@ -584,6 +616,7 @@ These settings apply automatically when opening this repo in VS Code.
 - [ ] Clone repository
 - [ ] Copy skills to `~/.claude/skills/`
 - [ ] Copy commands to `~/.claude/commands/`
+- [ ] **Install Claude Session Tracker extension** (see [VS Code Extension](#vs-code-extension))
 - [ ] Install `feature-dev` plugin (`/plugin marketplace add anthropics/claude-code` then `/plugin install feature-dev`)
 - [ ] Set up essential MCP servers (supabase, arxiv, perplexity, context7)
 - [ ] Configure API keys for perplexity, supabase, netlify
