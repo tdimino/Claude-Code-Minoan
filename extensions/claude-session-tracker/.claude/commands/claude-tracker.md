@@ -1,6 +1,6 @@
 # Claude Session Tracker
 
-List and browse your saved Claude Code sessions with keywords.
+List and browse your saved Claude Code sessions with status (running/inactive).
 
 ## Instructions
 
@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const readline = require('readline');
+const { execSync } = require('child_process');
 
 const PROJECTS_DIR = path.join(os.homedir(), '.claude', 'projects');
 const MAX_SESSIONS = 20;
@@ -17,6 +18,37 @@ const MAX_MESSAGES = 3;
 
 // Common words to filter out from keywords
 const STOP_WORDS = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'can', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'between', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 'just', 'and', 'but', 'if', 'or', 'because', 'until', 'while', 'this', 'that', 'these', 'those', 'what', 'which', 'who', 'whom', 'its', 'it', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'you', 'your', 'he', 'him', 'his', 'she', 'her', 'they', 'them', 'their', 'image', 'file', 'please', 'like', 'want', 'need', 'make', 'use', 'using', 'used', 'also', 'get', 'let', 'see', 'look', 'know', 'think', 'new', 'now', 'one', 'two', 'first', 'last', 'well', 'way', 'even', 'back', 'any', 'give', 'day', 'come', 'take', 'made', 'find', 'work', 'part', 'over', 'such', 'good', 'year', 'out', 'about', 'right', 'still', 'try', 'tell', 'call', 'keep', 'put', 'end', 'does', 'set', 'say', 'help']);
+
+// Get running Claude processes and their working directories
+function getRunningClaudeSessions() {
+  const cwds = new Set();
+  const homeDir = os.homedir();
+  try {
+    // Get all Claude process PIDs
+    const pidsResult = execSync('pgrep -f claude 2>/dev/null || true', { encoding: 'utf8' });
+    const pids = pidsResult.trim().split('\\n').filter(p => p && /^\\d+$/.test(p));
+
+    // For each PID, get its cwd using lsof
+    for (const pid of pids) {
+      try {
+        const lsofResult = execSync('lsof -p ' + pid + ' 2>/dev/null | grep cwd || true', { encoding: 'utf8' });
+        // lsof format: COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
+        // Example: "node 7583 user cwd DIR 1,17 3296 275187 /Users/tomdimino"
+        const match = lsofResult.match(/(\\/[^\\n]+)$/m);
+        if (match && match[1]) {
+          const cwd = match[1].trim();
+          // Filter out non-project dirs (home dir, .claude internal dirs)
+          if (cwd !== homeDir &&
+              !cwd.startsWith(homeDir + '/.claude/') &&
+              !cwd.includes('/plugins/cache/')) {
+            cwds.add(cwd);
+          }
+        }
+      } catch {}
+    }
+  } catch {}
+  return cwds;
+}
 
 function extractKeywords(messages) {
   const wordCounts = {};
@@ -88,7 +120,23 @@ async function parseSession(filePath) {
 }
 
 function decodeProjectPath(dirName) {
+  // Claude encodes: leading / -> -, all / -> -, space -> -
+  // But we can't distinguish space from / from literal -, so we keep as-is for display
+  // For matching, we'll normalize both paths
   return dirName.replace(/^-/, '/').replace(/-/g, '/');
+}
+
+function pathToKey(p) {
+  // Convert path to comparison key: lowercase, replace spaces and slashes with dashes
+  return p.toLowerCase().replace(/[\\/\\s]+/g, '-').replace(/^-/, '').replace(/-+/g, '-');
+}
+
+function isPathMatch(projectDirName, runningPath) {
+  // projectDirName: -Users-tomdimino-Desktop-Aldea-Prompt-development-Aldea-Soul-Engine
+  // runningPath: /Users/tomdimino/Desktop/Aldea/Prompt development/Aldea-Soul-Engine
+  const projectKey = projectDirName.toLowerCase().replace(/^-/, '');
+  const runningKey = pathToKey(runningPath);
+  return projectKey === runningKey;
 }
 
 function formatAge(isoDate) {
@@ -107,6 +155,9 @@ async function main() {
     console.log('No Claude sessions found.');
     return;
   }
+
+  // Get running sessions first
+  const runningDirs = getRunningClaudeSessions();
 
   const projectDirs = fs.readdirSync(PROJECTS_DIR, { withFileTypes: true })
     .filter(d => d.isDirectory())
@@ -134,21 +185,43 @@ async function main() {
   allFiles.sort((a, b) => b.mtime - a.mtime);
   const recent = allFiles.slice(0, MAX_SESSIONS);
 
+  // Count running vs inactive
+  let runningCount = 0;
+  let inactiveCount = 0;
+
+  const sessionsWithStatus = [];
+  for (const file of recent) {
+    const projectPath = decodeProjectPath(file.projectDir);
+    // Check if any running dir matches this project
+    let isRunning = false;
+    for (const runDir of runningDirs) {
+      if (isPathMatch(file.projectDir, runDir)) {
+        isRunning = true;
+        break;
+      }
+    }
+    if (isRunning) runningCount++; else inactiveCount++;
+    sessionsWithStatus.push({ ...file, projectPath, isRunning });
+  }
+
   console.log('\\n\\x1b[1m\\x1b[36m═══════════════════════════════════════════════════════════════\\x1b[0m');
   console.log('\\x1b[1m\\x1b[36m                    CLAUDE CODE SESSIONS                        \\x1b[0m');
-  console.log('\\x1b[1m\\x1b[36m═══════════════════════════════════════════════════════════════\\x1b[0m\\n');
+  console.log('\\x1b[1m\\x1b[36m═══════════════════════════════════════════════════════════════\\x1b[0m');
+  console.log('\\x1b[90m  ' + runningCount + ' running, ' + inactiveCount + ' inactive\\x1b[0m\\n');
 
-  for (let i = 0; i < recent.length; i++) {
-    const file = recent[i];
+  for (let i = 0; i < sessionsWithStatus.length; i++) {
+    const file = sessionsWithStatus[i];
     const session = await parseSession(file.filePath);
     if (!session) continue;
 
-    const projectPath = decodeProjectPath(file.projectDir);
-    const projectName = projectPath.split('/').pop();
+    const projectName = file.projectPath.split('/').pop();
     const age = formatAge(session.timestamp);
+    const statusBadge = file.isRunning
+      ? '\\x1b[42m\\x1b[30m RUNNING \\x1b[0m'
+      : '\\x1b[100m INACTIVE \\x1b[0m';
 
-    console.log('\\x1b[33m[' + (i + 1) + ']\\x1b[0m \\x1b[1m' + projectName + '\\x1b[0m');
-    console.log('    \\x1b[90mPath:\\x1b[0m ' + projectPath);
+    console.log('\\x1b[33m[' + (i + 1) + ']\\x1b[0m \\x1b[1m' + projectName + '\\x1b[0m  ' + statusBadge);
+    console.log('    \\x1b[90mPath:\\x1b[0m ' + file.projectPath);
     if (session.gitBranch) console.log('    \\x1b[90mBranch:\\x1b[0m \\x1b[35m' + session.gitBranch + '\\x1b[0m');
     console.log('    \\x1b[90mLast active:\\x1b[0m ' + age);
     console.log('    \\x1b[90mSession ID:\\x1b[0m ' + session.fullId);
@@ -176,10 +249,13 @@ main().catch(console.error);
 "
 ```
 
-Lists your ${MAX_SESSIONS} most recent Claude sessions with:
+Lists your 20 most recent Claude sessions with:
+- **Status badge** (RUNNING or INACTIVE)
 - Project name and path
 - Git branch (if available)
 - Last active time
-- Session ID (for \`claude --resume\`)
+- Session ID (for `claude --resume`)
 - **Keywords** extracted from conversation
-- Last ${MAX_MESSAGES} user messages
+- Last 3 user messages
+
+Running sessions detected via `lsof` checking for Claude processes.
