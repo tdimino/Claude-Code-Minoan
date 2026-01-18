@@ -1,0 +1,17 @@
+#!/bin/bash
+# ccpick - Interactive Session Picker
+# Interactive tmux session picker using fzf
+
+if ! command -v fzf &>/dev/null; then
+    echo "fzf required. Install with: brew install fzf"
+    exit 1
+fi
+
+SESSION=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | \
+    fzf --prompt="Select session: " \
+        --preview="tmux capture-pane -t {} -p | tail -30" \
+        --preview-window=right:50%)
+
+if [[ -n "$SESSION" ]]; then
+    tmux attach -t "$SESSION"
+fi

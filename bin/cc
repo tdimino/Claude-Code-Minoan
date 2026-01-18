@@ -1,0 +1,12 @@
+#!/bin/bash
+# cc - Quick Claude Session Launcher
+# Usage: cc [project-name]
+# Attaches to existing session or creates new one with claude
+
+SESSION="${1:-$(basename $(pwd))}"
+
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+    tmux attach -t "$SESSION"
+else
+    tmux new-session -s "$SESSION" -c "$(pwd)" "claude"
+fi

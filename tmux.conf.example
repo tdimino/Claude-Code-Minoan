@@ -1,0 +1,69 @@
+# Enable mouse scrolling and selection
+set -g mouse on
+
+# === 2026 BEST PRACTICES ===
+
+# Increase scrollback (Claude outputs are long)
+set -g history-limit 50000
+
+# Window numbering starts at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# Renumber windows when closed
+set -g renumber-windows on
+
+# Allow apps to set window names (for Claude status)
+set -g allow-rename on
+
+# Pass through terminal titles to outer terminal (iTerm2, Terminal.app)
+set -g set-titles on
+set -g set-titles-string "#{pane_title}"
+
+# Allow OSC escape sequences to pass through (for terminal-title.sh hook)
+set -ga terminal-overrides ',xterm*:XT:Ms=\E]52;c;%p2%s\007'
+
+# Faster escape (for vim users)
+set -sg escape-time 0
+
+# True color support
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm-256color:RGB"
+
+# Activity monitoring (know when Claude finishes)
+setw -g monitor-activity on
+set -g visual-activity on
+
+# Change prefix to Ctrl+A (avoid Claude Code Ctrl+B conflict)
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+# Modal keybindings (Zellij-style)
+# Pane mode: Ctrl+P
+bind -n C-p switch-client -T pane
+bind -T pane h select-pane -L
+bind -T pane j select-pane -D
+bind -T pane k select-pane -U
+bind -T pane l select-pane -R
+bind -T pane s split-window -v -c "#{pane_current_path}"
+bind -T pane v split-window -h -c "#{pane_current_path}"
+bind -T pane x kill-pane
+
+# Tab/Window mode: Ctrl+T
+bind -n C-t switch-client -T tab
+bind -T tab n new-window -c "#{pane_current_path}"
+bind -T tab h previous-window
+bind -T tab l next-window
+bind -T tab x kill-window
+bind -T tab r command-prompt -I "#W" "rename-window '%%'"
+
+# Popup windows (modern pattern)
+bind s display-popup -E "tmux list-sessions | fzf --reverse | cut -d: -f1 | xargs tmux switch-client -t"
+bind g display-popup -E -w 90% -h 90% "lazygit"
+
+# Minimal status bar
+set -g status-bg default
+set -g status-style "bg=default"
+set -g status-left ""
+set -g status-right "#(~/.local/bin/claude-tmux-status 2>/dev/null) #[fg=#45475a]#[fg=#cdd6f4,bg=#45475a] #S #[fg=#45475a,bg=default] %H:%M"

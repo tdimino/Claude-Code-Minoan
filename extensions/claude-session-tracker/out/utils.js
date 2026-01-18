@@ -71,9 +71,16 @@ exports.GIT_TIMEOUT_MS = 5000;
 // === Workspace Utilities ===
 /**
  * Get the current workspace folder path
- * Note: Only returns first workspace in multi-root workspaces
+ * Prioritizes active editor's workspace, falls back to first workspace
  */
 function getCurrentWorkspacePath() {
+    // Try to get workspace of active editor first (multi-root safe)
+    if (vscode.window.activeTextEditor) {
+        const workspace = vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri);
+        if (workspace)
+            return workspace.uri.fsPath;
+    }
+    // Fallback: return first workspace (single-root or no editor open)
     return vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 }
 /**

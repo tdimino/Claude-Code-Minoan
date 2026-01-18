@@ -1,0 +1,23 @@
+#!/bin/bash
+# ccls - List Claude Sessions with Status
+# Lists tmux sessions and shows which have Claude running
+
+echo "TMUX SESSIONS"
+echo "============="
+
+tmux list-sessions -F "#{session_name}|#{session_created}" 2>/dev/null | while IFS='|' read -r name created; do
+    has_claude=$(tmux list-panes -t "$name" -F "#{pane_current_command}" 2>/dev/null | grep -i claude)
+
+    if [[ -n "$has_claude" ]]; then
+        status="🟢 claude"
+    else
+        status="⚪ idle"
+    fi
+
+    created_fmt=$(date -r "$created" "+%b %d %H:%M" 2>/dev/null || echo "unknown")
+    printf "%-20s %s  (%s)\n" "$name" "$status" "$created_fmt"
+done
+
+if ! tmux list-sessions &>/dev/null; then
+    echo "No tmux sessions running"
+fi

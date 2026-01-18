@@ -7,8 +7,12 @@ Curated Claude Code configuration: skills, MCP servers, slash commands, and VS C
 - `/skills` - Custom Claude Code skills (copy to `~/.claude/skills/`)
 - `/commands` - Slash commands (copy to `~/.claude/commands/`)
 - `/extensions` - VS Code extensions for Claude Code workflow
-- `/hooks` - Git hooks and automation scripts
+- `/hooks` - Terminal title hooks, automation scripts
+- `/bin` - CLI tools for tmux/session management
+- `/scripts` - Session history scripts (fzf picker, etc.)
+- `/docs` - Reference documentation
 - `.mcp.json` - MCP server configurations (copy to project root)
+- `tmux.conf.example` - Optimized tmux config for Claude Code
 
 ## Quick Setup
 
@@ -83,7 +87,34 @@ Use `osgrep-reference` skill for full CLI reference and search patterns.
 
 Core: playwright, chrome-devtools, figma, shadcn, supabase, netlify, telnyx, exa, context7
 
+## tmux + Claude Workflow
+
+Optimized tmux configuration and CLI tools for managing Claude Code sessions.
+
+**Install CLI tools:**
+```bash
+cp bin/cc bin/ccls bin/ccpick bin/cckill bin/claude-tmux-status ~/.local/bin/
+cp scripts/* ~/.claude/scripts/
+cp tmux.conf.example ~/.tmux.conf  # or merge with existing
+```
+
+**Key Tools:**
+| Command | Description |
+|---------|-------------|
+| `cc [name]` | Create/attach tmux session with Claude |
+| `ccls` | List sessions with Claude status (🟢/⚪) |
+| `cc-pick` | fzf picker with tmux + Claude history integration |
+| `cckill` | Kill only idle sessions (preserves running Claude) |
+
+**tmux Keybindings:**
+- Prefix: `Ctrl+A` (avoids Claude Code's Ctrl+B)
+- Pane mode: `Ctrl+P` then h/j/k/l/s/v/x
+- Tab mode: `Ctrl+T` then n/h/l/x/r
+
+See `docs/tmux-claude-workflow.md` for full reference.
+
 ## Detailed Guides
 
+- @docs/tmux-claude-workflow.md - tmux session management
 - @CONTRIBUTING.md - Contribution guidelines
 - @README.md - Full setup and configuration

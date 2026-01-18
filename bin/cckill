@@ -1,0 +1,27 @@
+#!/bin/bash
+# cckill - Kill Idle Sessions
+# Kill tmux sessions without active Claude processes
+
+idle_sessions=()
+for session in $(tmux list-sessions -F "#{session_name}" 2>/dev/null); do
+    has_claude=$(tmux list-panes -t "$session" -F "#{pane_current_command}" | grep -i claude)
+    if [[ -z "$has_claude" ]]; then
+        idle_sessions+=("$session")
+    fi
+done
+
+if [[ ${#idle_sessions[@]} -eq 0 ]]; then
+    echo "No idle sessions to kill"
+    exit 0
+fi
+
+echo "Idle sessions (no Claude running):"
+printf "  - %s\n" "${idle_sessions[@]}"
+
+read -p "Kill these sessions? [y/N] " confirm
+if [[ "$confirm" == "y" ]]; then
+    for session in "${idle_sessions[@]}"; do
+        tmux kill-session -t "$session"
+        echo "Killed: $session"
+    done
+fi

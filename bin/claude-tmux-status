@@ -1,0 +1,8 @@
+#!/bin/bash
+# claude-tmux-status - Status Bar Helper
+# Shows Claude session count for tmux status bar
+
+count=$(tmux list-panes -a -F "#{pane_current_command}" 2>/dev/null | grep -ci claude)
+if [[ $count -gt 0 ]]; then
+    echo "🤖 $count "
+fi
