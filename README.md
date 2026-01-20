@@ -668,7 +668,10 @@ cat ~/.claude/commands/command-name.md
 
 ---
 
-**Last Updated**: 2026-01-17
+**Last Updated**: 2026-01-20
+
+**Recent Changes**:
+- **frontend-design** - Updated with refined aesthetic guidelines: bold typography, committed palettes, atmospheric backgrounds, and emphasis on distinctive design over generic AI aesthetics
 
 **Skills**: 24 skills across 5 categories
 **Commands**: 30+ slash commands
