@@ -41,6 +41,7 @@ Required:
 | `security` | OWASP, vulnerabilities, secrets | Security audits, compliance checks |
 | `refactor` | Code cleanup, modernization | Reducing tech debt, improving structure |
 | `docs` | API docs, READMEs, comments | Documentation tasks |
+| `planner` | ExecPlan design documents | Multi-hour tasks, complex features, significant refactors |
 
 ## Quick Execution
 
@@ -67,6 +68,9 @@ Examples:
 
 # Full-auto mode (no approval prompts)
 ~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh reviewer "Fix all lint errors" --full-auto
+
+# Create execution plan for complex feature
+~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh planner "Create an ExecPlan for adding WebSocket support"
 ```
 
 ## Session Management
@@ -102,6 +106,7 @@ python3 ~/.claude/skills/codex-orchestrator/scripts/codex-session.py info securi
 - **architect** for design decisions
 - **docs** for documentation
 - **refactor** for implementation improvements
+- **planner** for multi-hour implementation plans
 
 ## Chaining Patterns
 
@@ -112,6 +117,18 @@ python3 ~/.claude/skills/codex-orchestrator/scripts/codex-session.py info securi
 
 # 2. Investigate specific bug
 ~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh debugger "Debug the race condition found in cache.ts"
+```
+
+### Planner → Architect → Implement
+```bash
+# 1. Create comprehensive ExecPlan
+~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh planner "Create ExecPlan for new authentication system"
+
+# 2. Validate architecture
+~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh architect "Review the auth system ExecPlan for design issues"
+
+# 3. Implement (plan guides execution)
+~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh refactor "Implement milestone 1 from the auth ExecPlan" --full-auto
 ```
 
 ### Architect → Review → Refactor
@@ -191,7 +208,7 @@ export OPENAI_API_KEY=sk-...
 ```
 
 ### "Profile not found"
-Available profiles: reviewer, debugger, architect, security, refactor, docs
+Available profiles: reviewer, debugger, architect, security, refactor, docs, planner
 
 Check profile exists:
 ```bash
