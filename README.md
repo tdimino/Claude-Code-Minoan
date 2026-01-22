@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version"></a>
-  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-25-green.svg" alt="Skills"></a>
+  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-26-green.svg" alt="Skills"></a>
   <a href="#all-slash-commands"><img src="https://img.shields.io/badge/Commands-30+-purple.svg" alt="Commands"></a>
 </p>
 
@@ -53,6 +53,7 @@ claude-code-minoan/
 │   │   └── Firecrawl/               # Web scraping (prefer over WebFetch)
 │   └── planning-productivity/   # Planning tools
 │       ├── crypt-librarian/         # Film curator persona
+│       ├── super-ralph-wiggum/      # ⭐ Autonomous iteration loops (11 Tips)
 │       └── travel-requirements-expert/  # Travel itinerary planning
 ├── commands/                    # Slash commands
 │   ├── workflows/               # Multi-agent workflow commands
@@ -268,6 +269,35 @@ The codex-orchestrator skill lets Claude delegate tasks to OpenAI's Codex CLI wi
 ~/.claude/skills/codex-orchestrator/scripts/codex-exec.sh architect "Design fix for the cache race condition"
 ```
 
+### `super-ralph-wiggum` Skill - Autonomous Iteration Loops
+
+**Use when**: Running Claude Code in autonomous loops for bulk tasks like test coverage, lint fixing, code cleanup, or PRD-based feature development
+
+Based on [AI Hero's 11 Tips](https://www.aihero.dev/tips-for-ai-coding-with-ralph-wiggum), this skill runs the same prompt repeatedly until task completion, with context persisting through files and git history.
+
+**Available templates**:
+
+| Template | Use Case |
+|----------|----------|
+| `test-coverage` | Improve test coverage to target % |
+| `feature-prd` | Implement features from PRD file |
+| `lint-fix` | Fix lint errors incrementally |
+| `entropy-loop` | Remove dead code, smells, TODOs |
+| `duplication-loop` | Extract duplicate code into utilities |
+
+**Quick usage**:
+```
+Run super-ralph-wiggum with test-coverage template, max 20 iterations
+Run super-ralph-wiggum with feature-prd template using ./prd.json
+```
+
+**Why it's powerful**:
+- The agent chooses tasks from your PRD, not you
+- HITL mode for learning, AFK mode for overnight runs
+- Progress file persists learning across iterations
+- Docker sandbox support for safe unattended execution
+- "Fight entropy" and quality-first principles built in
+
 ### `/audit-plans` - Plan Completeness Auditing
 
 **Use when**: Before implementing a plan to ensure nothing is missed
@@ -320,6 +350,7 @@ Systematically audits implementation plans:
 ### Planning & Productivity (`skills/planning-productivity/`)
 
 - **crypt-librarian** - Film curator persona for sourcing pre-2016 cinema with literary/gothic sensibility, occult atmosphere, sensual mysticism, and historical grandeur. Uses Perplexity for film discourse, Exa for web searches
+- **super-ralph-wiggum** ⭐ - Autonomous iteration loops based on [AI Hero's 11 Tips](https://www.aihero.dev/tips-for-ai-coding-with-ralph-wiggum). Templates for test coverage, PRD features, lint fixing, entropy cleanup, duplication removal, docs generation, and migrations. HITL/AFK modes, progress tracking, Docker sandboxes for safety
 - **travel-requirements-expert** - Systematically gather comprehensive travel itinerary requirements through structured discovery questions, MCP-powered research, and expert detail gathering
 
 ## VS Code Extension
@@ -711,12 +742,13 @@ cat ~/.claude/commands/command-name.md
 
 ---
 
-**Last Updated**: 2026-01-20
+**Last Updated**: 2026-01-22
 
 **Recent Changes**:
+- **super-ralph-wiggum** ⭐ NEW - Autonomous iteration loops based on AI Hero's 11 Tips. Templates for test coverage, PRD features, lint fixing, entropy cleanup, duplication removal. HITL/AFK modes with Docker sandbox support
 - **frontend-design** - Updated with refined aesthetic guidelines: bold typography, committed palettes, atmospheric backgrounds, and emphasis on distinctive design over generic AI aesthetics
 
-**Skills**: 24 skills across 5 categories
+**Skills**: 26 skills across 5 categories
 **Commands**: 30+ slash commands
 **MCP Servers**: 14 configured servers
 

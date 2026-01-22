@@ -1,0 +1,55 @@
+{
+  "name": "Feature Project",
+  "description": "Brief description of the feature set",
+  "version": "1.0.0",
+  "metadata": {
+    "created": "2025-01-09",
+    "author": "your-name"
+  },
+  "features": [
+    {
+      "id": 1,
+      "story": "User can perform first action",
+      "passes": false,
+      "priority": 1,
+      "acceptance_criteria": [
+        "Criterion 1 is met",
+        "Criterion 2 is met",
+        "typecheck passes",
+        "tests pass"
+      ],
+      "dependencies": [],
+      "estimated_iterations": 2,
+      "notes": ""
+    },
+    {
+      "id": 2,
+      "story": "User can perform second action",
+      "passes": false,
+      "priority": 2,
+      "acceptance_criteria": [
+        "Criterion 1 is met",
+        "Criterion 2 is met"
+      ],
+      "dependencies": [1],
+      "estimated_iterations": 1,
+      "notes": "Depends on feature 1"
+    },
+    {
+      "id": 3,
+      "story": "User can perform third action",
+      "passes": false,
+      "priority": 3,
+      "acceptance_criteria": [
+        "Criterion 1 is met"
+      ],
+      "dependencies": [1, 2],
+      "estimated_iterations": 1,
+      "notes": ""
+    }
+  ],
+  "verification": {
+    "command": "pnpm typecheck && pnpm test",
+    "coverage_threshold": 80
+  }
+}
