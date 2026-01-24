@@ -95,28 +95,25 @@ Log progress to logs/${CLAUDE_SESSION_ID}.log
 
 ### Dynamic Context Injection
 
-The `` !`command` `` syntax runs shell commands before skill content reaches Claude. The command output replaces the placeholder.
+The exclamation-backtick syntax (`!` followed by a backtick-wrapped command) runs shell commands before skill content reaches Claude. The command output replaces the placeholder.
 
-**Example:**
+**Syntax:** `!` + `` `shell-command` ``
 
-```markdown
----
-name: pr-summary
-description: Summarize changes in a pull request
-context: fork
-agent: Explore
----
+**Example skill content:**
 
+```
 ## PR Context
-- Diff: !`gh pr diff`
-- Comments: !`gh pr view --comments`
-- Changed files: !`gh pr diff --name-only`
+- Diff: [exclamation]`gh pr diff`
+- Comments: [exclamation]`gh pr view --comments`
+- Changed files: [exclamation]`gh pr diff --name-only`
 
 Summarize this pull request...
 ```
 
+(Replace `[exclamation]` with actual `!` character in real skills)
+
 When this skill runs:
-1. Each `` !`command` `` executes immediately (before Claude sees anything)
+1. Each exclamation-backtick command executes immediately (before Claude sees anything)
 2. The output replaces the placeholder in the skill content
 3. Claude receives the fully-rendered prompt with actual data
 

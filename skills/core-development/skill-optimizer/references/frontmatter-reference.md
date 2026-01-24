@@ -54,18 +54,24 @@ ARGUMENTS: <user input>
 
 ## Dynamic Context Injection
 
-Shell commands can be executed before the skill content reaches Claude using the `` !`command` `` syntax.
+Shell commands can be executed before the skill content reaches Claude using the exclamation-backtick syntax (`!` followed by a backtick-wrapped command).
 
-```markdown
+**Syntax:** `!` + `` `shell-command` ``
+
+**Example skill content:**
+
+```
 ## Current PR
-- Diff: !`gh pr diff`
-- Comments: !`gh pr view --comments`
+- Diff: [!]`gh pr diff`
+- Comments: [!]`gh pr view --comments`
 
 Based on the above, summarize this PR...
 ```
 
+(Replace `[!]` with actual `!` character in real skills)
+
 **Execution order:**
-1. All `` !`command` `` placeholders execute
+1. All exclamation-backtick placeholders execute
 2. Output replaces each placeholder
 3. Fully-rendered content sent to Claude
 
@@ -180,12 +186,14 @@ allowed-tools: Bash(gh:*)
 ---
 
 ## PR Context
-- Diff: !`gh pr diff`
-- Comments: !`gh pr view --comments`
-- Files: !`gh pr diff --name-only`
+- Diff: [!]`gh pr diff`
+- Comments: [!]`gh pr view --comments`
+- Files: [!]`gh pr diff --name-only`
 
 Summarize this pull request focusing on:
 1. What changed
 2. Why it changed
 3. Potential concerns
 ```
+
+(Replace `[!]` with actual `!` character in real skills)
