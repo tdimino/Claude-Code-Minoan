@@ -23,11 +23,11 @@ if [ "$1" = "--preset" ]; then
         exit 1
     fi
 
-    # Generate with preset speaker
+    # Generate with preset speaker (--fast enables bfloat16 on M4+)
     if [ -n "$INSTRUCT" ]; then
-        qwen-tts generate "$TEXT" -s "$SPEAKER" -i "$INSTRUCT" -o "$OUTPUT" 2>/dev/null
+        qwen-tts generate "$TEXT" -s "$SPEAKER" -i "$INSTRUCT" -o "$OUTPUT" --fast 2>/dev/null
     else
-        qwen-tts generate "$TEXT" -s "$SPEAKER" -o "$OUTPUT" 2>/dev/null
+        qwen-tts generate "$TEXT" -s "$SPEAKER" -o "$OUTPUT" --fast 2>/dev/null
     fi
 else
     # Default: Oracle voice (cloned)
@@ -42,10 +42,10 @@ else
     if [ ! -f "$ORACLE_REF" ]; then
         echo "Error: Oracle reference audio not found: $ORACLE_REF" >&2
         echo "Falling back to preset speaker..." >&2
-        qwen-tts generate "$TEXT" -s Ryan -o "$OUTPUT" 2>/dev/null
+        qwen-tts generate "$TEXT" -s Ryan -o "$OUTPUT" --fast 2>/dev/null
     else
         REF_TEXT=$(cat "$ORACLE_TRANSCRIPT")
-        qwen-tts clone "$TEXT" "$ORACLE_REF" -r "$REF_TEXT" -o "$OUTPUT" 2>/dev/null
+        qwen-tts clone "$TEXT" "$ORACLE_REF" -r "$REF_TEXT" -o "$OUTPUT" --fast 2>/dev/null
     fi
 fi
 

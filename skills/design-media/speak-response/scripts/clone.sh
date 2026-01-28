@@ -29,8 +29,8 @@ if [ -z "$REF_TEXT" ]; then
     exit 1
 fi
 
-# Clone voice using Qwen3-TTS Base model
-qwen-tts clone "$TEXT" "$AUDIO" -r "$REF_TEXT" -o "$OUTPUT" 2>/dev/null
+# Clone voice using Qwen3-TTS Base model (--fast enables bfloat16 on M4+)
+qwen-tts clone "$TEXT" "$AUDIO" -r "$REF_TEXT" -o "$OUTPUT" --fast 2>/dev/null
 
 # Play audio (macOS)
 afplay "$OUTPUT" 2>/dev/null &
