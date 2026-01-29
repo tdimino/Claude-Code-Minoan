@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version"></a>
-  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-27-green.svg" alt="Skills"></a>
+  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-28-green.svg" alt="Skills"></a>
   <a href="#all-slash-commands"><img src="https://img.shields.io/badge/Commands-30+-purple.svg" alt="Commands"></a>
 </p>
 
@@ -46,6 +46,7 @@ claude-code-minoan/
 │   │   ├── gemini-claude-resonance/ # Cross-model AI dialogue with visual memory
 │   │   ├── nano-banana-pro/         # Gemini 3 Pro AI image generation
 │   │   ├── photo-to-slack-emoji/    # Photo to Slack emoji converter
+│   │   ├── rocaille-shader/         # Domain warping shader generator
 │   │   └── speak-response/          # Local TTS with Qwen3-TTS (Oracle voice)
 │   ├── research/                # Research tools
 │   │   ├── academic-research/       # Academic paper search with Exa + ArXiv
@@ -340,6 +341,7 @@ Systematically audits implementation plans:
 - **gemini-claude-resonance** - Cross-model dialogue between Claude and Gemini with shared visual memory. Multiple daimones (Flash, Pro, Dreamer, Director, Opus, Resonator) with dynamic verb selection and WorkingMemory-style transcripts. Includes Daimon Chamber UI and Resonance Field protocol for persistent visual narratives
 - **nano-banana-pro** - Generate and edit high-quality images using Google's Nano Banana Pro (Gemini 3 Pro Image) AI model. Supports up to 4K resolution, multiple aspect ratios, and advanced prompting
 - **photo-to-slack-emoji** - Transform photos into Slack-optimized emojis using Nano Banana Pro AI (10 styles, auto-optimization for 64KB limit)
+- **rocaille-shader** - Generate Rocaille-style domain warping shaders with sinusoidal displacement. Creates organic swirling light effects for WebGL/GLSL visualizations, shader art, and procedural backgrounds. Outputs to Shadertoy, Three.js, P5.js, or vanilla WebGL
 - **speak-response** - Local text-to-speech using Qwen3-TTS. Default Oracle voice (deep, prophetic Dune narrator). Supports voice cloning, voice design, and 9 preset speakers with emotion/mood control. Runs entirely on Apple Silicon
 
 ### Research (`skills/research/`)
