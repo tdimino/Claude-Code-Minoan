@@ -40,8 +40,9 @@ export class TerminalWatcher {
 
   /**
    * Start watching terminals
+   * @returns Promise that resolves when initial terminal scan completes
    */
-  activate(): void {
+  activate(): Promise<void> {
     // Initialize cross-window state tracking
     this.crossWindowState.activate((globalCount) => {
       // Called when another window updates its terminals
@@ -73,8 +74,8 @@ export class TerminalWatcher {
     );
 
     // Check existing terminals on activation
-    // Use Promise.all to properly handle async operations (not forEach)
-    Promise.all(
+    // Returns Promise so caller can await completion before checking crash recovery
+    return Promise.all(
       vscode.window.terminals.map(async terminal => {
         try {
           if (await this.isClaudeTerminal(terminal)) {
@@ -84,12 +85,17 @@ export class TerminalWatcher {
           console.error('Error checking existing terminal:', err);
         }
       })
-    ).catch(err => {
-      console.error('Error during terminal initialization:', err);
-    });
-
-    // Initialize status bar
-    this.updateStatusBar();
+    ).then(
+      () => {
+        // Update status bar AFTER all terminals have been detected
+        this.updateStatusBar();
+      },
+      err => {
+        console.error('Error during terminal initialization:', err);
+        // Still update status bar on error to show resumable state if available
+        this.updateStatusBar();
+      }
+    );
   }
 
   /**

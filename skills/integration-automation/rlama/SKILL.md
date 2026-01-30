@@ -249,11 +249,14 @@ export OLLAMA_HOST="http://192.168.1.100:11434"
 
 ### Default Model
 
-The skill uses `llama3.2` by default. For different defaults:
+The skill uses `qwen2.5:7b` by default (changed from llama3.2 in Jan 2026). For legacy mode:
 
 ```bash
-# Per-command override
-rlama rag qwen2.5:7b my-rag ./docs
+# Use the old llama3.2 default
+python3 ~/.claude/skills/rlama/scripts/rlama_manage.py create my-rag ./docs --legacy
+
+# Per-command model override
+rlama rag deepseek-r1:8b my-rag ./docs
 
 # For queries
 rlama run my-rag --query "question" -m deepseek-r1:8b
@@ -262,8 +265,8 @@ rlama run my-rag --query "question" -m deepseek-r1:8b
 **Recommended models:**
 | Model | Size | Best For |
 |-------|------|----------|
-| `llama3.2` | 3B | Fast, general use |
-| `qwen2.5:7b` | 7B | Better reasoning |
+| `qwen2.5:7b` | 7B | Default - better reasoning (recommended) |
+| `llama3.2` | 3B | Fast, legacy default (use `--legacy`) |
 | `deepseek-r1:8b` | 8B | Complex questions |
 | `llama3.3:70b` | 70B | Highest quality (slow) |
 
@@ -321,6 +324,26 @@ For guided RAG creation:
 ```bash
 rlama wizard
 ```
+
+## Resilient Indexing (Skip Problem Files)
+
+For folders with mixed content where some files may exceed embedding context limits (e.g., large PDFs), use the resilient script that processes files individually and skips failures:
+
+```bash
+# Create RAG, skipping files that fail
+python3 ~/.claude/skills/rlama/scripts/rlama_resilient.py create my-rag ~/Documents
+
+# Add to existing RAG, skipping failures
+python3 ~/.claude/skills/rlama/scripts/rlama_resilient.py add my-rag ~/MoreDocs
+
+# With docs-only filter
+python3 ~/.claude/skills/rlama/scripts/rlama_resilient.py create research ~/Papers --docs-only
+
+# With legacy model
+python3 ~/.claude/skills/rlama/scripts/rlama_resilient.py create my-rag ~/Docs --legacy
+```
+
+The script reports which files were added and which were skipped due to errors.
 
 ## Troubleshooting
 

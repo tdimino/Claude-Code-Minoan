@@ -82,14 +82,16 @@ def run_rlama_command(args: list, timeout: int = 600, stream: bool = False) -> t
         return ('', f'Command timed out after {timeout} seconds', 1)
     except FileNotFoundError:
         return ('', 'rlama command not found. Is RLAMA installed?', 1)
+    except (KeyboardInterrupt, SystemExit):
+        raise  # Re-raise to allow proper termination
     except Exception as e:
-        return ('', str(e), 1)
+        return ('', f'Unexpected error: {str(e)}', 1)
 
 
 def create_rag(
     rag_name: str,
     folder_path: str,
-    model: str = 'llama3.2',
+    model: str = 'qwen2.5:7b',
     chunking: str = 'hybrid',
     chunk_size: int = 1000,
     chunk_overlap: int = 200,
@@ -147,6 +149,7 @@ def add_documents(
     folder_path: str,
     exclude_dirs: list = None,
     exclude_exts: list = None,
+    process_exts: list = None,
     json_output: bool = False,
 ) -> dict:
     """Add documents to an existing RAG."""
@@ -157,6 +160,9 @@ def add_documents(
 
     if exclude_dirs:
         cmd.extend(['--exclude-dir', ','.join(exclude_dirs)])
+
+    if process_exts:
+        cmd.extend(['--process-ext', ','.join(process_exts)])
 
     if exclude_exts:
         cmd.extend(['--exclude-ext', ','.join(exclude_exts)])
@@ -338,8 +344,9 @@ Commands:
 
 Examples:
   %(prog)s create my-rag ~/Documents
+  %(prog)s create my-rag ~/Research --docs-only    # Only PDF, MD, TXT, DOCX
   %(prog)s create my-rag ~/Code --exclude-dirs node_modules,dist
-  %(prog)s add my-rag ./more-docs
+  %(prog)s add my-rag ./more-docs --docs-only
   %(prog)s remove my-rag old-file.pdf
   %(prog)s delete my-rag --force
   %(prog)s watch my-rag ~/Notes
@@ -353,13 +360,17 @@ Examples:
     create_parser = subparsers.add_parser('create', help='Create a new RAG')
     create_parser.add_argument('rag_name', help='Name for the new RAG')
     create_parser.add_argument('folder_path', help='Path to folder with documents')
-    create_parser.add_argument('--model', '-m', default='llama3.2', help='LLM model (default: llama3.2)')
+    create_parser.add_argument('--model', '-m', default='qwen2.5:7b', help='LLM model (default: qwen2.5:7b)')
+    create_parser.add_argument('--legacy', action='store_true',
+        help='Use llama3.2 instead of qwen2.5:7b (the old default)')
     create_parser.add_argument('--chunking', choices=['fixed', 'semantic', 'hybrid', 'hierarchical'], default='hybrid')
     create_parser.add_argument('--chunk-size', type=int, default=1000)
     create_parser.add_argument('--chunk-overlap', type=int, default=200)
     create_parser.add_argument('--exclude-dirs', nargs='+', help='Directories to exclude')
     create_parser.add_argument('--exclude-exts', nargs='+', help='File extensions to exclude')
     create_parser.add_argument('--process-exts', nargs='+', help='Only process these extensions')
+    create_parser.add_argument('--docs-only', action='store_true',
+        help='Only index documents (PDF, MD, TXT, DOCX, DOC, ORG). Recommended for research folders.')
     create_parser.add_argument('--json', action='store_true', help='Output as JSON')
 
     # Add command
@@ -368,6 +379,9 @@ Examples:
     add_parser.add_argument('folder_path', help='Path to folder or file to add')
     add_parser.add_argument('--exclude-dirs', nargs='+', help='Directories to exclude')
     add_parser.add_argument('--exclude-exts', nargs='+', help='File extensions to exclude')
+    add_parser.add_argument('--process-exts', nargs='+', help='Only process these extensions')
+    add_parser.add_argument('--docs-only', action='store_true',
+        help='Only index documents (PDF, MD, TXT, DOCX, DOC, ORG)')
     add_parser.add_argument('--json', action='store_true', help='Output as JSON')
 
     # Remove command
@@ -403,26 +417,51 @@ Examples:
 
     # Execute command
     if args.command == 'create':
+        # Handle --docs-only preset
+        process_exts = args.process_exts
+        exclude_dirs = args.exclude_dirs or []
+
+        if args.docs_only:
+            process_exts = ['.pdf', '.md', '.txt', '.docx', '.doc', '.org']
+            exclude_dirs = list(set(exclude_dirs + ['.git', '.osgrep', '.claude', 'node_modules', '__pycache__']))
+            print('Using --docs-only mode: indexing PDF, MD, TXT, DOCX, DOC, ORG only')
+
+        # Handle --legacy flag: only apply if model wasn't explicitly changed
+        if args.legacy and args.model == 'qwen2.5:7b':
+            model = 'llama3.2'
+        else:
+            model = args.model
+
         result = create_rag(
             rag_name=args.rag_name,
             folder_path=args.folder_path,
-            model=args.model,
+            model=model,
             chunking=args.chunking,
             chunk_size=args.chunk_size,
             chunk_overlap=args.chunk_overlap,
-            exclude_dirs=args.exclude_dirs,
+            exclude_dirs=exclude_dirs if exclude_dirs else None,
             exclude_exts=args.exclude_exts,
-            process_exts=args.process_exts,
+            process_exts=process_exts,
             json_output=args.json,
         )
         sys.exit(0 if result['success'] else 1)
 
     elif args.command == 'add':
+        # Handle --docs-only preset
+        process_exts = args.process_exts
+        exclude_dirs = args.exclude_dirs or []
+
+        if args.docs_only:
+            process_exts = ['.pdf', '.md', '.txt', '.docx', '.doc', '.org']
+            exclude_dirs = list(set(exclude_dirs + ['.git', '.osgrep', '.claude', 'node_modules', '__pycache__']))
+            print('Using --docs-only mode: indexing PDF, MD, TXT, DOCX, DOC, ORG only')
+
         result = add_documents(
             rag_name=args.rag_name,
             folder_path=args.folder_path,
-            exclude_dirs=args.exclude_dirs,
+            exclude_dirs=exclude_dirs if exclude_dirs else None,
             exclude_exts=args.exclude_exts,
+            process_exts=process_exts,
             json_output=args.json,
         )
         sys.exit(0 if result['success'] else 1)
