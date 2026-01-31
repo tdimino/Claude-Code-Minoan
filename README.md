@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version"></a>
-  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-29-green.svg" alt="Skills"></a>
+  <a href="#available-skills"><img src="https://img.shields.io/badge/Skills-30-green.svg" alt="Skills"></a>
   <a href="#all-slash-commands"><img src="https://img.shields.io/badge/Commands-30+-purple.svg" alt="Commands"></a>
 </p>
 
@@ -38,6 +38,7 @@ claude-code-minoan/
 │   │   ├── figma-mcp/               # Figma design integration
 │   │   ├── mcp-server-manager/      # MCP server configuration
 │   │   ├── netlify-integration/     # Netlify deployment management
+│   │   ├── parakeet/                # Local speech-to-text with NVIDIA Parakeet TDT
 │   │   ├── rlama/                   # ⭐ Local RAG system for semantic document search
 │   │   ├── supabase-skill/          # Supabase project management
 │   │   ├── telnyx-api/              # Telnyx telephony integration
@@ -332,6 +333,7 @@ Systematically audits implementation plans:
 - **figma-mcp** - Convert Figma designs to production code with accurate styling
 - **mcp-server-manager** - Configure and manage MCP servers in Claude Code
 - **netlify-integration** - Deploy and manage Netlify projects with Next.js serverless functions, environment variables, and continuous deployment
+- **parakeet** - Local speech-to-text using NVIDIA Parakeet TDT 0.6B (~600MB, 100% offline). 3,386x realtime speed, 6.05% WER. Transcribe audio files (.wav, .mp3, .m4a, .flac, .ogg, .aac) or dictate from microphone. Apple Silicon MPS acceleration. Commands: `/parakeet <file>`, `/parakeet dictate`, `/parakeet check`
 - **rlama** ⭐ - Local RAG system for semantic document search. Create knowledge bases from PDFs, markdown, code files. Query documents with natural language. Runs 100% locally with Ollama (default: qwen2.5:7b). Includes resilient indexing that skips context overflow errors, management scripts for create/add/remove/query operations, and `--legacy` flag for llama3.2 compatibility
 - **supabase-skill** - Configure and manage Supabase projects using MCP. Database design, migrations, RLS policies
 - **telnyx-api** - SMS/MMS messaging, voice calls, phone numbers, webhooks, and telephony integration
@@ -748,9 +750,10 @@ cat ~/.claude/commands/command-name.md
 
 ---
 
-**Last Updated**: 2026-01-29
+**Last Updated**: 2026-01-30
 
 **Recent Changes**:
+- **parakeet** NEW - Local speech-to-text using NVIDIA Parakeet TDT 0.6B. Transcribe audio files or dictate from microphone with 3,386x realtime speed and 6.05% WER. Supports .wav, .mp3, .m4a, .flac, .ogg, .aac formats. Apple Silicon MPS acceleration. Commands: `/parakeet <file>`, `/parakeet dictate`, `/parakeet check`
 - **rlama** UPGRADED - Default model changed to `qwen2.5:7b` (better reasoning). Use `--legacy` flag for old `llama3.2` default. New `rlama_resilient.py` script processes files individually, skipping context overflow errors instead of aborting entire runs. Improved error handling: full error messages, KeyboardInterrupt support, Python 3.9 compatibility
 - **claude-session-tracker** FIX - Fixed race condition in crash recovery detection by awaiting terminal watcher initialization before checking for recoverable sessions
 - **Firecrawl** SDK v4.x COMPATIBILITY - Updated `firecrawl_api.py` for breaking changes in `firecrawl-py` v4.13.4: class renamed `FirecrawlApp` → `Firecrawl`, methods renamed (`scrape_url()` → `scrape()`, `crawl_url()` → `crawl()`, `async_crawl_url()` → `start_crawl()`), search returns `SearchData` with `.web` attribute. All 12 tests passing
@@ -758,7 +761,7 @@ cat ~/.claude/commands/command-name.md
 - **speak-response** - Local TTS with Qwen3-TTS. Oracle voice default (deep, prophetic Dune narrator). Voice cloning, voice design, 9 preset speakers with emotion control. Apple Silicon optimized
 - **super-ralph-wiggum** - Autonomous iteration loops based on AI Hero's 11 Tips. Templates for test coverage, PRD features, lint fixing, entropy cleanup, duplication removal. HITL/AFK modes with Docker sandbox support
 
-**Skills**: 29 skills across 5 categories
+**Skills**: 30 skills across 5 categories
 **Commands**: 30+ slash commands
 **MCP Servers**: 14 configured servers
 
